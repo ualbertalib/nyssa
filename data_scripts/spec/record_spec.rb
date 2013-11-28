@@ -42,6 +42,8 @@ describe Record do
       marc_records.load_data("spec/test_data.xml")
       @record.marc_record=marc_records.list[0]
       @record.single_target.should be_false
+      @record.marc_record=marc_records.list.last
+      @record.single_target.should be_true
     end
   end
 end
