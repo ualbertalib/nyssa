@@ -45,7 +45,7 @@
     that avoids logging every request
 -->
 
-<schema name="Blacklight Demo Index" version="1.5">
+<schema name="Blacklight Demo Index" version="1.4">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
        Applications should change this to reflect the nature of the search collection.
        version="1.4" is Solr's version number for the schema syntax and semantics.  It should
@@ -216,7 +216,7 @@
     <!-- A text field that only splits on whitespace for exact matching of words -->
     <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+       <tokenizer class="solr.WhitespaceTokenizerFactory"/> 
       </analyzer>
     </fieldType>
 
@@ -522,7 +522,7 @@
    
    <!-- these display fields are NOT multi-valued -->
    <field name="marc_display" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="title_display" type="string" indexed="false" stored="true" multiValued="false"/>
+   <field name="title_display" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="title_vern_display" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="subtitle_display" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="subtitle_vern_display" type="string" indexed="false" stored="true" multiValued="false"/>
@@ -588,6 +588,14 @@
    <dynamicField name="*_unstem_search" type="text_general" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="*spell" type="textSpell" indexed="true" stored="false" multiValued="true" />
 
+   <!-- dynamic field for UA serials admin interface -->
+   <dynamicField name="ua_*" type="string" indexed="true" stored="true" multiValued="false" />
+
+
+  <field name="identifiers" type="text" indexed="true" stored="false" multiValued="true"/>
+  <field name="ua_target" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="ua_title" type="text" indexed="true" stored="true" multiValued="false"/>
+
    <!-- uncomment the following to ignore any fields that don't already match an existing 
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
@@ -602,10 +610,10 @@
  <uniqueKey>id</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>text</defaultSearchField>
+ <defaultSearchField>identifiers</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
- <solrQueryParser defaultOperator="OR"/>
+ <solrQueryParser defaultOperator="AND"/>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
@@ -659,7 +667,6 @@
    <copyField source="subject_t" dest="opensearch_display"/>
    <copyField source="subject_addl_t" dest="opensearch_display"/>  
 
-
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 
 	  destination field is to use the dynamic field syntax. 
@@ -684,6 +691,8 @@
    <str name="paramkey">param value</str>
  </similarity>
  -->
+
+
 
 
 </schema>

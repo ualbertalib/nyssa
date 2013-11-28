@@ -48,3 +48,6 @@ end
 
 
 gem "bootstrap-sass"
+
+gem "marc"
+gem "nokogiri"
