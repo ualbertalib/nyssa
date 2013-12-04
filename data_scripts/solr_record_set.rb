@@ -40,4 +40,12 @@ class SolrRecordSet
       @list[issn].set_match(false, statement) if statement.include? "Not updated"
     end
   end
+
+  def to_xml
+    xml_record = %[<?xml version="1.0" encoding="UTF-8"?><add>]
+      @list.each do |key, value|
+        xml_record += value.to_xml
+      end
+    xml_record += %[</add>]
+  end
 end

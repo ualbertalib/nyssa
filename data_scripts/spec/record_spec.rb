@@ -11,7 +11,6 @@ describe Record do
     it "should include other instance variables" do
       variables = @record.instance_variables
       variables.should include(:@catkey)
-      variables.should include(:@pubDateNotes)
       variables.should include(:@updated)
       variables.should include(:@bad_dates)
       variables.should include(:@bad_issn_statement) # derive bad_issn, no_issn
@@ -57,6 +56,21 @@ describe Record do
     it "should return the match status of the record" do
       @record.set_match(true, "Pub Dates ok")
       expect(@record.match?).to eq({:updated => true, :statement=>"Pub Dates ok"})
+    end
+  end
+
+  describe "#to_xml" do
+
+   it "should return an xml representation" do 
+     marc_records = MarcRecords.new
+     marc_records.load_data("spec/test_data.xml")
+     @record.marc_record = marc_records.list[0]
+     @record.expand!
+
+    xml_record = "<doc><field name=\"id\">954921332001</field><field name=\"ua_object_id\">954921332001</field><field name=\"ua_issnPrint\">0000-0019</field><field name=\"ua_catkey\">5903768</field></doc>"
+
+     expect(@record.to_xml).to eq(xml_record)
+
     end
   end
 end

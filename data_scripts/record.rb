@@ -7,13 +7,12 @@ class Record < MarcRecord
 
   def initialize 
     @catkey = ""
-    @pubDateNotes = ""
     @updated = ""
     @bad_dates = ""
     @bad_issn_statement = "" # derive bad_issn, no_issn
     @no_url = ""
     @date_statement = ""
-    @match_statement = ""
+    @match_statement = "" # this takes over from pubDateNotes
     @marc_record = MarcRecord.new
     @object_id = ""
     @issn = ""
@@ -47,5 +46,10 @@ class Record < MarcRecord
 
   def match?
     {:updated=> @update_status, :statement => @match_statement}
+  end
+
+  def to_xml
+
+    %[<doc><field name=\"id\">#{@object_id}</field><field name=\"ua_object_id\">#{@object_id}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_catkey\">#{@catkey}</field></doc>]
   end
 end

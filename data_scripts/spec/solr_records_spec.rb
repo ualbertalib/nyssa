@@ -51,4 +51,15 @@ describe SolrRecordSet do
       expect(@solr_records.list["0001-2610"].match?).to eq({:updated=>false, :statement=>"Not updated - Bad Pub dates - NO Related Records "})
     end
   end
+
+  describe "#to_xml" do
+    it "should return a solr XML representation of the list" do
+      @solr_records.load_marc_records("spec/test_data.xml")
+      @solr_records.load_match_data("spec/test_match_data.txt")
+      @solr_records.match!
+      xml_representation = File.open("spec/test_solr_data.xml").read.strip
+      expect(@solr_records.to_xml).to eq(xml_representation)
+    end
+  end
 end
+
