@@ -39,11 +39,11 @@ describe SolrRecordSet do
 
   describe "#match!" do
     it "should add match data to records in list" do
-      expect(@solr_records.list["0000-0019"].match?).to eq({:updated=>true, :statement=>"Pub Dates ok"})
+      expect(@solr_records.list["0000-0019"].updated?).to eq({:updated=>true, :statement=>"Pub Dates ok"})
     end
 
     it "should return updated = false if not updated" do
-      expect(@solr_records.list["0001-2610"].match?).to eq({:updated=>false, :statement=>"Not updated - Bad Pub dates - NO Related Records "})
+      expect(@solr_records.list["0001-2610"].updated?).to eq({:updated=>false, :statement=>"Not updated - Bad Pub dates - NO Related Records "})
     end
   end
 

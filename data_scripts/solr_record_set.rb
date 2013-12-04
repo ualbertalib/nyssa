@@ -17,12 +17,7 @@ class SolrRecordSet
       r.marc_record = record
       @list[r.issn] = r
     end
-  end
-
-  def add_supplementary_data
-    @list.each do |record|
-      record.expand!
-    end
+    add_supplementary_data
   end
 
   def load_match_data(data_file)
@@ -36,8 +31,7 @@ class SolrRecordSet
       data = match.split("|")
       issn = data[2].chomp
       statement = data[3].chomp
-      @list[issn].set_match(true, statement) if statement == "Pub Dates ok"
-      @list[issn].set_match(false, statement) if statement.include? "Not updated"
+      @list[issn].set_match(updated?(statement), statement) 
     end
   end
 
@@ -53,5 +47,17 @@ class SolrRecordSet
     File.open(solr_file, "w"){|f|
       f.puts self.to_xml
     }
+  end
+
+  private
+
+  def updated?(statement)
+    statement.include?("Not updated") ? false : true
+  end
+  
+  def add_supplementary_data
+    @list.each do |key,record|
+      record.expand!
+    end
   end
 end

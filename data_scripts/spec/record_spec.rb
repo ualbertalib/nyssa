@@ -35,10 +35,10 @@ describe Record do
     end
   end
 
-  describe "#match?" do
+  describe "#updated?" do
     it "should return the match status of the record" do
       record.set_match(true, "Pub Dates ok")
-      expect(record.match?).to eq({:updated => true, :statement=>"Pub Dates ok"})
+      expect(record.updated?).to eq({:updated => true, :statement=>"Pub Dates ok"})
     end
   end
 

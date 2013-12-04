@@ -22,6 +22,8 @@ class MarcRecords
     end
   end
 
+  private
+
   def parse_targets(record)
     targets = record.find_all{|t| ('866') === t.tag}
     target_list = []
