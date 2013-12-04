@@ -17,7 +17,7 @@ describe Record do
       variables.should include(:@bad_issn_statement) # derive bad_issn, no_issn
       variables.should include(:@no_url)
       variables.should include(:@date_statement)
-      variables.should include(:@holdings_comparison)
+      variables.should include(:@match_statement)
     end
 
     it "should include a MarcRecord object" do
@@ -44,6 +44,19 @@ describe Record do
       @record.single_target.should be_false
       @record.marc_record=marc_records.list.last
       @record.single_target.should be_true
+    end
+  end
+
+  describe "#set_match" do
+    it "should set 'status' and 'match_statement'" do
+      @record.set_match(true, "Pub Dates ok")
+    end
+  end
+  
+  describe "#match?" do
+    it "should return the match status of the record" do
+      @record.set_match(true, "Pub Dates ok")
+      expect(@record.match?).to eq({:updated => true, :statement=>"Pub Dates ok"})
     end
   end
 end

@@ -3,7 +3,7 @@ require_relative "web_services"
 
 class Record < MarcRecord
   
-  attr_reader :marc_record, :catkey
+  attr_reader :marc_record, :catkey, :issn
 
   def initialize 
     @catkey = ""
@@ -13,12 +13,16 @@ class Record < MarcRecord
     @bad_issn_statement = "" # derive bad_issn, no_issn
     @no_url = ""
     @date_statement = ""
-    @holdings_comparison = ""
+    @match_statement = ""
     @marc_record = MarcRecord.new
+    @object_id = ""
+    @issn = ""
   end
  
   def marc_record=(record)
     @marc_record = record
+    @object_id = record.object_id
+    @issn = record.issnPrint
   end
 
   def expand!
@@ -34,5 +38,14 @@ class Record < MarcRecord
 
   def single_target
     @marc_record.targets.size==1
+  end
+
+  def set_match(status, statement)
+    @update_status = status
+    @match_statement = statement
+  end
+
+  def match?
+    {:updated=> @update_status, :statement => @match_statement}
   end
 end
