@@ -1,4 +1,5 @@
 require("marc")
+require_relative("record")
 
 class MarcRecords
 
@@ -11,7 +12,7 @@ class MarcRecords
   def load_data(data_file)
     reader = MARC::XMLReader.new(data_file)
     for record in reader
-      marc_record = MarcRecord.new
+      marc_record = Record::MarcRecord.new
       marc_record.object_id = record['090']['a'] if record['090']   
       marc_record.title = record['245']['a'].gsub(">","").gsub("<", "") if record['245'] 
       marc_record.issnPrint = record['022']['a'] if record['022']

@@ -1,7 +1,12 @@
-require_relative "marc_record"
 require_relative "web_services"
 
-class Record < MarcRecord
+class Record
+
+  class MarcRecord
+
+    attr_accessor :object_id, :title, :issnPrint, :issnElectronic, :targets
+
+  end
   
   attr_reader :marc_record, :catkey, :issn
 

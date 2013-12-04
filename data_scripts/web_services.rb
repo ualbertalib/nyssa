@@ -3,7 +3,6 @@ require "open-uri"
 
 class WebServices
 
-
   def call_by_object_id(object_id)
     endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/searchCatalog?clientID=Primo&term1="
     search_url = "#{endpoint}#{object_id}"
@@ -41,5 +40,4 @@ class WebServices
     end
     statement
   end
-
 end

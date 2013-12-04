@@ -23,7 +23,7 @@ describe MarcRecords do
       @marc_records.list.size.should be > 0
     end
     it "the list should contain MarcRecord objects" do
-      @marc_records.list[0].should be_an_instance_of MarcRecord
+      @marc_records.list[0].should be_an_instance_of Record::MarcRecord
     end
 
     it "should populate a list of targets" do
