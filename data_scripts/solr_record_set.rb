@@ -48,4 +48,10 @@ class SolrRecordSet
       end
     xml_record += %[</add>]
   end
+
+  def to_solr(solr_file)
+    File.open(solr_file, "w"){|f|
+      f.puts self.to_xml
+    }
+  end
 end

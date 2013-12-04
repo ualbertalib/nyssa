@@ -61,5 +61,27 @@ describe SolrRecordSet do
       expect(@solr_records.to_xml).to eq(xml_representation)
     end
   end
+
+  describe "#to_solr" do
+    it "should write the solr xml records to a given file" do
+      @solr_records.load_marc_records("spec/test_data.xml")
+      @solr_records.load_match_data("spec/test_match_data.txt")
+      @solr_records.match!
+      FileUtils.rm("spec/solr.xml") if File.exists?("spec/solr.xml")
+      @solr_records.to_solr("spec/solr.xml")
+      expect(File.exist?("spec/solr.xml")).to be_true
+    end
+
+    it "should contain the same content as to_xml" do
+      @solr_records.load_marc_records("spec/test_data.xml")
+      @solr_records.load_match_data("spec/test_match_data.txt")
+      @solr_records.match!      
+      FileUtils.rm("spec/solr.xml") if File.exists?("spec/solr.xml")
+      @solr_records.to_solr("spec/solr.xml")
+      xml_representation = File.open("spec/solr.xml").read.strip
+      expect(@solr_records.to_xml).to eq(xml_representation)
+
+    end
+  end
 end
 
