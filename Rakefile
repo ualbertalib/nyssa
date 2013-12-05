@@ -7,3 +7,4 @@ task :fetch_data do
   `curl http://resolver.library.ualberta.ca/sfx2sirsi/notSIR > data/notSIR`
   `curl http://resolver.library.ualberta.ca/sfx2sirsi/data/sfxdata.xml > data/sfxdata.xml`   
 end
+
