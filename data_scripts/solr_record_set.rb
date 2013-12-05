@@ -10,6 +10,8 @@ class SolrRecordSet
   end
 
   def load_marc_records(data_file)
+    # I've never really liked this. Definitely a candiate for refactoring
+    # to get rid of the dependency
     marc_records = MarcRecords.new
     marc_records.load_data(data_file)
     marc_records.list.each do |record|
@@ -31,6 +33,8 @@ class SolrRecordSet
       data = match.split("|")
       issn = data[2].chomp
       statement = data[3].chomp
+      # Here's a dependency: we know #set_match and we know the order of the 
+      # parameters. This should definitely be refactored
       @list[issn].set_match(updated?(statement), statement) 
     end
   end
@@ -44,6 +48,8 @@ class SolrRecordSet
   end
 
   def to_solr(solr_file)
+    # I need to find the Ruby pattern for this. I'm starting to think passing
+    # in file paths for the method to open is wrong.
     File.open(solr_file, "w"){|f|
       f.puts self.to_xml
     }

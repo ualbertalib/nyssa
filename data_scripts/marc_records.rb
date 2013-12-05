@@ -12,6 +12,16 @@ class MarcRecords
   def load_data(data_file)
     reader = MARC::XMLReader.new(data_file)
     for record in reader
+      # you could change this to something like
+      # @list << Record::MarcRecord.new(record)
+      # And let Record::MarcRecord.new handle the implementation.
+      # Which reinstates MarcRecord perhaps as a class of its own...
+      # I still think that's better - there's still instance creation, 
+      # but that could be wrapped:
+      # @list << populate!(record)
+      # def populate!
+      #   Record::MarcRecord.new(record)
+      # end
       marc_record = Record::MarcRecord.new
       marc_record.object_id = record['090']['a'] if record['090']   
       marc_record.title = record['245']['a'].gsub(">","").gsub("<", "") if record['245'] 

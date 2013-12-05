@@ -11,6 +11,8 @@ class Record
   attr_reader :marc_record, :catkey, :issn
 
   def initialize 
+    # I think that as long as MarcRecord is defined within Record this should
+    # be OK. 
     @marc_record = MarcRecord.new
   end
  
@@ -45,6 +47,13 @@ class Record
   private 
 
   def call_web_services
+    # Use dependency injection here? 
+    # def call_web_services(web_services_object)
+    #   web_services.call(@marc_record.object_id)
+    # end
+    # This makes this method much simpler.
+    # And the specification of WebServices.new passes
+    # up to the spec or the mainline
     web_services = WebServices.new
     web_services.call_by_object_id(@marc_record.object_id)
     web_services

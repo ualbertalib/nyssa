@@ -4,6 +4,10 @@ require "open-uri"
 class WebServices
 
   def call_by_object_id(object_id)
+    # This should actually be abstracted to #call(term)
+    # This particular endpoint doesn't care whether it calls by object_id or issn.
+    # Actually, if we also passed the API function (searchCatalog or lookupTitleInfo) we
+    # could DRY date_statement...
     endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/searchCatalog?clientID=Primo&term1="
     search_url = "#{endpoint}#{object_id}"
     @xml_response = open(search_url).read
