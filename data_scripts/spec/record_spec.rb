@@ -1,53 +1,53 @@
 require_relative "spec_helper"
 
 describe Record do
-
   let(:record){ Record.new }
-  let(:marc_records){ MarcRecords.new }
-
+  let(:marc_record){ double() }
 
   before :each do
-    marc_records.load_data("spec/test_data.xml")
+    marc_record.stub(:issnPrint){ "0000-0019" }
+    marc_record.stub(:sfx_object_id){ "954921332001" }
   end
 
-  describe "#new" do
-    it "should include a MarcRecord object" do
-      record.marc_record.should be_an_instance_of Record::MarcRecord
+  before(:each){ record.marc_record = marc_record }
+ 
+ context "given a marc record" do
+    
+    it "stores the marc record" do
+      expect(record.marc_record).to eq marc_record
     end
+    
+    # Not sure these expectations are required, since they're covered
+    # by the to_xml test further on...
+    
+    it "populates the issn" do 
+      expect(record.issn).to eq "0000-0019" 
+    end
+
+    it "populates the object id" do
+      expect(record.sfx_object_id).to eq "954921332001"
+    end
+
+    it "populates the titleID" do
+      expect(record.titleID).to eq "5903768"
+    end
+
   end
 
-  describe "#expand!" do
-    it "should populate the catkey from the marc_record" do
-      record.marc_record=marc_records.list[0]
-      record.expand!
-      record.catkey.should == "5903768" 
-    end
+  context "given a an update statement" do
+   it "stores the update statement" do
+     updated = true
+     statement = "Pub Dates ok"
+     record.set_match(updated, statement)
+     expect(record.updated?).to eq({:updated=>true, :statement=>"Pub Dates ok"})
+   end
   end
 
-  describe "#single_target" do
-    it "should return false if a record has more than one target" do
-      record.marc_record=marc_records.list[0]
-      record.single_target.should be_false
-    end
-    it "should return true if a record has only one target" do
-      record.marc_record=marc_records.list.last
-      record.single_target.should be_true
-    end
-  end
-
-  describe "#updated?" do
-    it "should return the match status of the record" do
-      record.set_match(true, "Pub Dates ok")
-      expect(record.updated?).to eq({:updated => true, :statement=>"Pub Dates ok"})
-    end
-  end
-
-  describe "#to_xml" do
-   it "should return an xml representation" do 
-     record.marc_record = marc_records.list[0]
-     record.expand!
-     xml_record = "<doc><field name=\"id\">954921332001</field><field name=\"ua_object_id\">954921332001</field><field name=\"ua_issnPrint\">0000-0019</field><field name=\"ua_catkey\">5903768</field></doc>"
-     expect(record.to_xml).to eq(xml_record)
+  context "when asked for an xml representation" do
+    let(:xml_record){  %[<doc><field name=\"id\">954921332001</field><field name=\"ua_sfx_object_id\">954921332001</field><field name=\"ua_issnPrint\">0000-0019</field><field name=\"ua_titleID\">5903768</field></doc>] }
+   
+    it "returns the correct representation" do
+      expect(record.to_xml).to eq xml_record
     end
   end
 end

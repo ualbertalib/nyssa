@@ -4,11 +4,11 @@ class Record
 
   class MarcRecord
 
-    attr_accessor :object_id, :title, :issnPrint, :issnElectronic, :targets
+    attr_accessor :sfx_object_id, :title, :issnPrint, :issnElectronic, :targets
 
   end
   
-  attr_reader :marc_record, :catkey, :issn
+  attr_reader :marc_record, :titleID, :issn, :sfx_object_id
 
   def initialize 
     @marc_record = MarcRecord.new
@@ -16,17 +16,9 @@ class Record
  
   def marc_record=(record)
     @marc_record = record
-    @object_id = record.object_id
+    @sfx_object_id = record.sfx_object_id
     @issn = record.issnPrint
-  end
-
-  def expand!
-    sirsi_record = call_web_services
-    @catkey = sirsi_record.titleID
-  end
-
-  def single_target
-    @marc_record.targets.size==1
+    @titleID = fetch_titleID
   end
 
   def set_match(status, statement)
@@ -39,14 +31,17 @@ class Record
   end
 
   def to_xml
-    %[<doc><field name=\"id\">#{@object_id}</field><field name=\"ua_object_id\">#{@object_id}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_catkey\">#{@catkey}</field></doc>]
+    %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_sfx_object_id\">#{@sfx_object_id}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_titleID\">#{@titleID}</field></doc>]
   end
 
   private 
 
-  def call_web_services
-    web_services = WebServices.new
-    web_services.call_by_object_id(@marc_record.object_id)
-    web_services
+  def fetch_titleID
+    WebServices.new.titleID(@marc_record.sfx_object_id)
   end
+
+  # Doesn't seem to be called anywhere... possibly just for future to_xml
+  #def single_target
+  #  @marc_record.targets.size==1
+  #end
 end
