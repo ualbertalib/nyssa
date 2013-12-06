@@ -4,8 +4,8 @@ describe SolrRecordSet do
 
   before(:all) do
     @solr_records = SolrRecordSet.new
-    @solr_records.load_marc_records("spec/test_data.xml")
-    @solr_records.load_match_data("spec/test_match_data.txt") 
+    @solr_records.load_marc_records("spec/data/test_data.xml")
+    @solr_records.load_match_data("spec/data/test_match_data.txt") 
     @solr_records.match!
   end
 
@@ -49,23 +49,23 @@ describe SolrRecordSet do
 
   describe "#to_xml" do
     it "should return a solr XML representation of the list" do
-      xml_representation = File.open("spec/test_solr_data.xml").read.strip
+      xml_representation = File.open("spec/data/test_solr_data.xml").read.strip
       expect(@solr_records.to_xml).to eq(xml_representation)
     end
   end
 
   describe "#to_solr" do
     before(:each) do 
-      FileUtils.rm("spec/solr.xml") if File.exists?("spec/solr.xml") 
-      @solr_records.to_solr("spec/solr.xml")
+      FileUtils.rm("spec/data/solr.xml") if File.exists?("spec/data/solr.xml") 
+      @solr_records.to_solr("spec/data/solr.xml")
     end
 
     it "should write the solr xml records to a given file" do
-      expect(File.exist?("spec/solr.xml")).to be_true
+      expect(File.exist?("spec/data/solr.xml")).to be_true
     end
 
     it "should contain the same content as to_xml" do
-      xml_representation = File.open("spec/solr.xml").read.strip
+      xml_representation = File.open("spec/data/solr.xml").read.strip
       expect(@solr_records.to_xml).to eq(xml_representation)
     end
   end
