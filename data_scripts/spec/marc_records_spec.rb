@@ -10,7 +10,7 @@ describe MarcRecords do
     marc_records.list.size.should be > 0
   end
 
-  context "given a populated list of recordsi, each record" do
+  context "given a populated list of records, each record" do
     it "should be a MarcRecord" do
       expect(marc_records.list[0]).to be_an_instance_of Record::MarcRecord
     end

@@ -4,20 +4,26 @@ class SolrRecordSet
 
   attr_reader :list, :raw_match_data
 
-  def initialize
+  def initialize(data_file, match_data_file)
     @list = {}
     @raw_match_data = []
+    load_marc_records(data_file)
+    load_match_data(match_data_file)
+    match!
   end
 
+  private
+
   def load_marc_records(data_file)
-    marc_records = MarcRecords.new
-    marc_records.load_data(data_file)
+    @list = process(MarcRecords.new(data_file))
+  end
+
+  def process(marc_records)
     marc_records.list.each do |record|
       r = Record.new
       r.marc_record = record
       @list[r.issn] = r
     end
-    add_supplementary_data
   end
 
   def load_match_data(data_file)
@@ -49,15 +55,7 @@ class SolrRecordSet
     }
   end
 
-  private
-
   def updated?(statement)
     statement.include?("Not updated") ? false : true
-  end
-  
-  def add_supplementary_data
-    @list.each do |key,record|
-      record.expand!
-    end
   end
 end

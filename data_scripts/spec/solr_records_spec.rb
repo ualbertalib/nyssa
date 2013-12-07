@@ -2,72 +2,32 @@ require_relative "spec_helper"
 
 describe SolrRecordSet do
 
-  before(:all) do
-    @solr_records = SolrRecordSet.new
-    @solr_records.load_marc_records("spec/data/test_data.xml")
-    @solr_records.load_match_data("spec/data/test_match_data.txt") 
-    @solr_records.match!
-  end
+  let(:solr_records){ SolrRecordSet.new("spec/data/test_data.xml", "spec/data/test_match_data.txt") }
 
-  describe "#new" do
-    it "should be an instance of SolrRecordSet" do
-      @solr_records.should be_an_instance_of SolrRecordSet
+  context "given an sfx data file" do
+    it "loads the specified data file into an hash of records" do
+      expect(solr_records.list).to_not be_empty
     end
   end
 
-  describe "#list" do
-    it "should contain a list of records" do
-      @solr_records.list.should be_an_instance_of Hash
+  context "given a populated hash" do
+   it "should have an list of Records" do
+     expect(solr_records.list.first).to be_an_instance_of Record::MarcRecord
+   end
+  end
+
+  context "once the hash is populated" do
+
+    it "should contain complete Records" do
+      expect(solr_records.list.first.issnElectronic).to eq("2150-4008")
+      expect(solr_records.list.first.issnPrint).to eq("0000-0019")
+      expect(solr_records.list.first.sfx_object_id).to eq("954921332001")
+      expect(solr_records.list.first.targets).to eq(["Academic Search Complete:Full Text", "Business Source Complete:Full Text","Canadian Reference Centre:Full Text", "EBSCOhost Library & Information Science Source:Full Text", "EBSCOhost OmniFile Full Text Select:Full Text", "Education Research Complete:Full Text", "Factiva:Full Text", "Free E- Journals:Full Text", "Gale Cengage Contemporary Women's Issues:Full Text", "Gale Cengage CPI.Q:Full Text","Gale Cengage Literature Resource Center:Full Text", "Literary Reference Center:Full Text","MasterFILE Premier:Full Text","MAS Ultra - School Edition:Full Text","ProQuest ABI/INFORM Global New Platform:Full Text"])
+      expect(solr_records.list.first.title).to eq("Publishers weekly")
     end
   end
 
-  
-  describe "#load_marc_records" do
-    it "should load marc data and populate the list of records" do
-      key, value = @solr_records.list.first
-      value.should be_an_instance_of Record
-      key.should eq "0000-0019"
-    end
-  end
+  context "it produces a solr.xml file" do
 
-  describe "#load_match_data" do
-    it "should read from matchissn" do
-      @solr_records.raw_match_data.should be_an_instance_of Array
-      @solr_records.raw_match_data[0].should_not be_nil
-    end
-  end
-
-  describe "#match!" do
-    it "should add match data to records in list" do
-      expect(@solr_records.list["0000-0019"].updated?).to eq({:updated=>true, :statement=>"Pub Dates ok"})
-    end
-
-    it "should return updated = false if not updated" do
-      expect(@solr_records.list["0001-2610"].updated?).to eq({:updated=>false, :statement=>"Not updated - Bad Pub dates - NO Related Records "})
-    end
-  end
-
-  describe "#to_xml" do
-    it "should return a solr XML representation of the list" do
-      xml_representation = File.open("spec/data/test_solr_data.xml").read.strip
-      expect(@solr_records.to_xml).to eq(xml_representation)
-    end
-  end
-
-  describe "#to_solr" do
-    before(:each) do 
-      FileUtils.rm("spec/data/solr.xml") if File.exists?("spec/data/solr.xml") 
-      @solr_records.to_solr("spec/data/solr.xml")
-    end
-
-    it "should write the solr xml records to a given file" do
-      expect(File.exist?("spec/data/solr.xml")).to be_true
-    end
-
-    it "should contain the same content as to_xml" do
-      xml_representation = File.open("spec/data/solr.xml").read.strip
-      expect(@solr_records.to_xml).to eq(xml_representation)
-    end
   end
 end
-
