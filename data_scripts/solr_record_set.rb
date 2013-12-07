@@ -9,9 +9,22 @@ class SolrRecordSet
     @raw_match_data = []
     load_marc_records(data_file)
     load_match_data(match_data_file)
-    match!
+    #match!
   end
 
+  def to_xml
+    xml_record = %[<?xml version="1.0" encoding="UTF-8"?><add>]
+      @list.each do |key, value|
+        xml_record += value.to_xml
+      end
+    xml_record += %[</add>]
+  end
+
+  def to_solr(solr_file)
+    File.open(solr_file, "w"){|f|
+      f.puts self.to_xml
+    }
+  end
   private
 
   def load_marc_records(data_file)
@@ -19,11 +32,13 @@ class SolrRecordSet
   end
 
   def process(marc_records)
+    list = {}
     marc_records.list.each do |record|
       r = Record.new
       r.marc_record = record
-      @list[r.issn] = r
+      list.merge!(r.issn => r)
     end
+    list
   end
 
   def load_match_data(data_file)
@@ -41,19 +56,6 @@ class SolrRecordSet
     end
   end
 
-  def to_xml
-    xml_record = %[<?xml version="1.0" encoding="UTF-8"?><add>]
-      @list.each do |key, value|
-        xml_record += value.to_xml
-      end
-    xml_record += %[</add>]
-  end
-
-  def to_solr(solr_file)
-    File.open(solr_file, "w"){|f|
-      f.puts self.to_xml
-    }
-  end
 
   def updated?(statement)
     statement.include?("Not updated") ? false : true
