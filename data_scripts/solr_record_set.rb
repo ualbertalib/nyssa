@@ -9,7 +9,7 @@ class SolrRecordSet
     @raw_match_data = []
     load_marc_records(data_file)
     load_match_data(match_data_file)
-    #match!
+    match!
   end
 
   def to_xml
@@ -52,10 +52,9 @@ class SolrRecordSet
       data = match.split("|")
       issn = data[2].chomp
       statement = data[3].chomp
-      @list[issn].set_match(updated?(statement), statement) 
+      @list[issn].set_match(updated?(statement), statement) if @list[issn] 
     end
   end
-
 
   def updated?(statement)
     statement.include?("Not updated") ? false : true

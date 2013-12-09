@@ -17,14 +17,11 @@ describe SolrRecordSet do
   end
 
   context "once the hash is populated" do
-    let(:record){ double() }
-    before :each do
-      record.stub(:to_xml){"<doc><field name=\"id\">954921332001</field><field name=\"ua_sfx_object_id\">954921332001</field><field name=\"ua_issnPrint\">0000-0019</field><field name=\"ua_titleID\">5903768</field></doc>"}
-    end
+    let(:record){ File.open("spec/data/golden_solr.xml", "rb").read.gsub('<?xml version="1.0" encoding="UTF-8"?><add>', '').gsub('</add>', '')
+}
 
     it "should contain complete xml representations of records" do
-      expect(solr_records.list["0000-0019"].to_xml).to eq record.to_xml
-    end
+      expect(solr_records.list["0000-0019"].to_xml).to eq record    end
   end
 
   context "when asked for a solr.xml file" do
