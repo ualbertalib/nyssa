@@ -181,4 +181,14 @@ def single_record
     Bad issn 5542585|a5542585|1738-995x
     Bad issn 5530956|a5530956|1772-094x"
  end
+
+ def holding_error_records
+   %[659588|s0001-4346
+   SFX end date too late: SFX-1997 Sirsi-1991
+   SFX Holdings: 1967-1997
+
+   1478060|s0001-6837
+   SFX end date too late: SFX-2013 Sirsi-1972
+   SFX Holdings: 2006-]
+ end
  end

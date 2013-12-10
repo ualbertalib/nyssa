@@ -5,9 +5,10 @@ class Record
 
   attr_reader :marc_record, :issn
 
-  def initialize(record, bad_issn)
+  def initialize(record, bad_issn, bad_dates)
     @marc_record = MarcRecord.new(record)
     @bad_issn = bad_issn
+    @bad_dates = bad_dates
     populate!
   end
  
@@ -19,9 +20,7 @@ class Record
     @eissn = @marc_record.electronicISSN
     @language = @marc_record.language
     @no_issn = "false"
-    @bad_dates = "false"
     @no_url = ""
-    @holdings_comparison = ""
     @bad_issn_statement = ""
     @date_statement = ""
   end
@@ -36,7 +35,7 @@ class Record
   end
 
   def to_xml
-   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@bad_dates}</field><field name=\"ua_bad_issn\">#{@bad_issn==@titleID}</field><field name=\"ua_bad_issn_statement\">#{@bad_issn_statement}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@holdings_comparison}</field><field name=\"ua_dateStatement\">#{@match_statement}</field>]
+   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@bad_dates.include?(@titleID)}</field><field name=\"ua_bad_issn\">#{@bad_issn==@titleID}</field><field name=\"ua_bad_issn_statement\">#{@bad_issn_statement}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@bad_dates.for(@titleID)}</field><field name=\"ua_dateStatement\">#{@match_statement}</field>]
   
   xml_record+=targets
   xml_record+="</doc>"
