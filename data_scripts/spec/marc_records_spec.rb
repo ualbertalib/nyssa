@@ -1,10 +1,14 @@
 require "marc"
 require_relative "spec_helper.rb"
 
+RSpec.configure do |c|
+  c.include TestData
+end
+
 describe MarcRecords do
   
   # Probably should mock the data file  object here...
-  let(:marc_records){  MarcRecords.new("spec/data/test_data.xml") }
+  let(:marc_records){  MarcRecords.new(StringIO.new(single_record)) }
 
   it "should populate a list with marc records" do
     marc_records.list.size.should be > 0

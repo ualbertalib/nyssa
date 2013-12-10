@@ -6,7 +6,7 @@ end
 
 describe SolrRecordSet do
 
-  let(:solr_records){ SolrRecordSet.new(StringIO.new(single_record), "spec/data/test_match_data.txt") }
+  let(:solr_records){ SolrRecordSet.new(StringIO.new(single_record), StringIO.new(match_data)) }
 
   context "given an sfx data file" do
     it "loads the specified data file into an hash of records" do
@@ -32,9 +32,9 @@ describe SolrRecordSet do
     end
 
     it "creates a solr.xml file" do
-      File.delete("spec/data/test_solr.xml") if File.exist?("spec/data/test_solr.xml")
-      solr_records.to_solr("spec/data/test_solr.xml")
-      expect(File.open("spec/data/test_solr.xml").read.chomp).to eq solr_records.to_xml
+      File.delete("spec/solr.xml") if File.exist?("spec/solr.xml")
+      solr_records.to_solr("spec/solr.xml")
+      expect(File.open("spec/solr.xml").read.chomp).to eq solr_records.to_xml
     end
   end
 end

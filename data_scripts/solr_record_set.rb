@@ -40,7 +40,7 @@ class SolrRecordSet
   end
 
   def load_match_data(data_file)
-    File.open(data_file).each_line do |line|
+    data_file.each_line do |line|
       @raw_match_data << line
     end
   end
