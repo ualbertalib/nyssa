@@ -37,5 +37,4 @@ class MarcRecord
     end
     target_list
   end
-
 end
