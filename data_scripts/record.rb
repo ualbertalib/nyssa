@@ -3,11 +3,10 @@ require_relative "marc_record"
 
 class Record
 
-  attr_reader :marc_record 
+  attr_reader :marc_record, :issn
 
   def initialize(record)
-    record = MARC::XMLReader.new(StringIO.new(record))
-    @marc_record = MarcRecord.new(record.first)
+    @marc_record = MarcRecord.new(record)
     populate!
   end
  
@@ -18,16 +17,18 @@ class Record
     @title = @marc_record.title
     @eissn = @marc_record.electronicISSN
     @language = @marc_record.language
-    @no_issn = ""
-    @bad_dates = ""
-    @bad_issn = ""
+    @no_issn = "false"
+    @bad_dates = "false"
+    @bad_issn = "false"
     @no_url = ""
     @holdings_comparison = ""
+    @bad_issn_statement = ""
+    @date_statement = ""
   end
 
   def set_match(status, statement)
-    @update_status = status
-    @match_statement = statement
+    @update_status = status 
+    @match_statement = statement 
   end
 
   def updated?
@@ -35,7 +36,7 @@ class Record
   end
 
   def to_xml
-   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{@single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@bad_dates}</field><field name=\"ua_bad_issn\">false</field><field name=\"ua_bad_issn_statement\">#{@bad_issn}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@holdings_comparison}</field><field name=\"ua_dateStatement\">#{@match_statement}</field></doc>]
+   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@bad_dates}</field><field name=\"ua_bad_issn\">false</field><field name=\"ua_bad_issn_statement\">#{@bad_issn_statement}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@holdings_comparison}</field><field name=\"ua_dateStatement\">#{@match_statement}</field>]
   
   xml_record+=targets
   xml_record+="</doc>"
@@ -54,8 +55,7 @@ class Record
 
   def targets
     temp_string=""
-    ts=@marc_record.targets.split(",")
-    ts.each do |t|
+    @marc_record.targets.each do |t|
       temp_string+="<field name=\"ua_target\">#{t.strip}</field>"
     end
    temp_string

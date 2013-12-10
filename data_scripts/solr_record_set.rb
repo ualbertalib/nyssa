@@ -13,7 +13,7 @@ class SolrRecordSet
   end
 
   def to_xml
-    xml_record = %[<?xml version="1.0" encoding="UTF-8"?><add>]
+    xml_record = %[<xml version="1.0" encoding="UTF-8"?><add>]
       @list.each do |key, value|
         xml_record += value.to_xml
       end
@@ -34,9 +34,7 @@ class SolrRecordSet
   def process(marc_records)
     list = {}
     marc_records.list.each do |record|
-      r = Record.new
-      r.marc_record = record
-      list.merge!(r.issn => r)
+      list.merge!(record.issn => record)
     end
     list
   end

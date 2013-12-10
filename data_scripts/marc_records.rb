@@ -27,34 +27,6 @@ class MarcRecords
   end
 
   def populate!(record)
-      marc_record = new_marc_record
-      marc_record.sfx_object_id = sfx_object_id(record)  
-      marc_record.title = title(record) 
-      marc_record.issnPrint = issn(record)      
-      marc_record.issnElectronic = eissn(record)
-      marc_record.targets = parse_targets(record)
-      marc_record
+    Record.new(record)
   end
-
-  # isolate dependencies on marc
-  
-  def new_marc_record
-    Record::MarcRecord.new
-  end
-  def sfx_object_id(record)
-    record['090']['a'] if record['090'] 
-  end
-  
-  def title(record)
-    record['245']['a'].gsub(">","").gsub("<", "") if record['245'] 
-  end
-
-  def issn(record)
-    record['022']['a'] if record['022']
-  end
-  
-  def eissn(record)
-    record['776']['x'] if record['776']
-  end
-
 end

@@ -11,8 +11,8 @@ describe MarcRecords do
   end
 
   context "given a populated list of records, each record" do
-    it "should be a MarcRecord" do
-      expect(marc_records.list[0]).to be_an_instance_of Record::MarcRecord
+    it "should be a Record" do
+      expect(marc_records.list[0]).to be_an_instance_of Record
     end
   end
 end
