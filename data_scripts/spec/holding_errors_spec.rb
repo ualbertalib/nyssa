@@ -1,9 +1,5 @@
 require_relative("spec_helper")
 
-RSpec.configure do |c|
-  c.include TestData
-end
-
 describe HoldingErrors do
 
   let(:holding_errors){ HoldingErrors.new(StringIO.new(holding_error_records)) }

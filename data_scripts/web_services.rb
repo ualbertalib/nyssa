@@ -3,8 +3,15 @@ require "open-uri"
 
 class WebServices
 
-  def titleID(object_id)
-    doc = call(object_id)
+  attr_reader :titleID
+
+  def initialize(sfx_object_id)
+    @sfx_object_id = sfx_object_id
+    @titleID = fetch_titleID
+  end
+
+  def fetch_titleID
+    doc = call(@sfx_object_id)
     if hits(doc).to_i == 0 then
       return "No record found."
     else
@@ -12,14 +19,14 @@ class WebServices
     end
   end
 
-  def date_statement(object_id)
+  def date_statement
     statement = ""
-    doc = call(object_id)
+    doc = call(@sfx_object_id)
     if hits(doc).to_i == 0 then
       statement = "Record not found in Sirsi"
     else 
       endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
-      search_url = "#{endpoint}#{titleID(object_id)}"
+      search_url = "#{endpoint}#{@titleID}"
       doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
       doc.xpath("//MarcEntryInfo").each do |element|
        element_value = element.xpath("text").text
@@ -42,8 +49,4 @@ class WebServices
     Nokogiri::XML(open(search_url).read).remove_namespaces!
   end
 
-#  def record
-#    @xml_response
-#  end
-#
 end

@@ -1,9 +1,5 @@
 require_relative "spec_helper"
 
-RSpec.configure do |c|
-  c.include TestData
-end
-
 describe Record do
  context "given a marc record" do
   let(:record){ Record.new(MARC::XMLReader.new(StringIO.new(single_record)).first) }

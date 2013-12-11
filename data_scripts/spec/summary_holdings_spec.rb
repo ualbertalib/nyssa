@@ -2,10 +2,6 @@ require_relative "spec_helper"
 
 describe SummaryHoldings do
 
-RSpec.configure do |c|
-  c.include TestData
-end
-
   before :each do
     @summary_holdings = SummaryHoldings.new(StringIO.new(summary_holdings_records))
   end

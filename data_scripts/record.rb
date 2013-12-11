@@ -14,12 +14,12 @@ class Record
   def populate!
     @sfx_object_id = @marc_record.sfx_object_id
     @issn = @marc_record.issnPrint
-    @titleID = fetch_titleID
     @title = @marc_record.title
     @eissn = @marc_record.electronicISSN
     @language = @marc_record.language
     @no_issn = "false"
     @no_url = ""
+    fetch_web_services
   end
 
   def set_match(status, statement)
@@ -32,7 +32,7 @@ class Record
   end
 
   def to_xml
-   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@holding_error}</field><field name=\"ua_bad_issn\">#{@bad_issn}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@holding_error_statement}</field><field name=\"ua_date_statement\">#{@match_statement}</field><field name=\"ua_summary_holdings\">#{@summary_holdings}</field><field name=\"ua_sirsi_coverage\">#{fetch_sirsi_coverage}</field>]
+   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{fetch_titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{@holding_error}</field><field name=\"ua_bad_issn\">#{@bad_issn}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{@holding_error_statement}</field><field name=\"ua_date_statement\">#{@match_statement}</field><field name=\"ua_summary_holdings\">#{@summary_holdings}</field><field name=\"ua_sirsi_coverage\">#{fetch_sirsi_coverage}</field>]
   
   xml_record+=targets
   xml_record+="</doc>"
@@ -41,12 +41,16 @@ class Record
 
   private 
 
+  def fetch_web_services
+    @web_services = WebServices.new(@sfx_object_id)
+  end
+
   def fetch_titleID
-    WebServices.new.titleID(@marc_record.sfx_object_id)
+    @web_services.titleID
   end
 
   def fetch_sirsi_coverage
-    WebServices.new.date_statement(@marc_record.sfx_object_id)
+    @web_services.date_statement
   end
 
   def single_target

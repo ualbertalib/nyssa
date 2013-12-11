@@ -6,4 +6,6 @@ require_relative("../holding_errors")
 require_relative("../summary_holdings")
 require_relative("./test_data")
 
-
+RSpec.configure do |c|
+  c.include TestData
+end
