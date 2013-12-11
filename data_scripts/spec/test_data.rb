@@ -163,6 +163,22 @@ def single_record
 %[<?xml version="1.0" encoding="UTF-8" standalone="yes"?><SearchCatalogResponse xmlns="http://schemas.sirsidynix.com/symws/standard"><queryID>41-701</queryID><totalHits>1</totalHits><firstHitDisplayed>1</firstHitDisplayed><lastHitDisplayed>1</lastHitDisplayed><HitlistTitleInfo><titleID>414895</titleID><materialType>CR</materialType><title>De Economist</title><author></author><yearOfPublication>1852</yearOfPublication><copiesOnOrder>0</copiesOnOrder><ISBN></ISBN><SICI></SICI><UPC></UPC><OCLCControlNumber>02210758</OCLCControlNumber><url>http://resolver.lrc.macewan.ca/macewan?url%5Fver=Z39.88-2004&amp;ctx%5Fver=Z39.88-2004&amp;ctx%5Fenc=info:ofi/enc:UTF-8&amp;rfr%5Fid=info:sid/sfxit.com:opac%5F856&amp;url%5Fctx%5Ffmt=info:ofi/fmt:kev:mtx:ctx&amp;sfx.ignore%5Fdate%5Fthreshold=1&amp;rft.object%5Fid=954921341152&amp;svc%5Fval%5Ffmt=info:ofi/fmt:kev:mtx:sch%5Fsvc&amp;</url><documentNumber>1</documentNumber><callNumber>HB 9 E18 jaarg.135 1987</callNumber></HitlistTitleInfo></SearchCatalogResponse>]
  end
 
+ def not_in_sfx_records
+	"0000-0027|s0000-0027|1632032|Lakeland College Access 1997-
+	0000-1287|s0000-1287|1628187|University of Alberta Access: 21st ed.(2003) 
+	0000-3600|o53839260|2839410|University of Alberta Access: 1999-2003 
+	0001-0634|s0001-0634|526759|Free CASSI online search tool
+	0001-4001|s0001-4001|2736050|University of Alberta Access: v.123(1998)-v.124(1999) 
+	0001-4508|s0001-4508|5518468|Grant MacEwan University Access: 1989-2001 
+	0001-5512|s0001-5512|2309511|Grant MacEwan University Access: 2009- 
+	0001-5733|s0001-5733|4318266|University of Alberta Access: 2000- 
+	0001-5954|s0001-5954|327110|University of Alberta Access: v.1(1950)-v.40(1982) 
+	0001-6519|s0001-6519|5518262|Grant MacEwan University Access: v.52(2001)- 
+	0001-6926|s0001-6926|1462963|University of Alberta Access: 1921-1962 
+	0002-0214|s0002-0214|2651202|Grant MacEwan University Access: 1998- 
+	0002-4775|s0002-4775|469895|Free Access: 1995-"
+ end
+
  def match_data
   "483028|s0001-2343|0000-0019|Pub Dates ok"
  end
