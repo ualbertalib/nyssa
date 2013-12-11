@@ -12,13 +12,6 @@ class MarcRecords
   
   private
 
-  def parse_targets(record)
-    targets = record.find_all{|t| ('866') === t.tag}
-    target_list = []
-    targets.each{|t| target_list << t['x'].to_s }
-    target_list
-  end
-
   def load_data(data_file)
     reader = MARC::XMLReader.new(data_file)
     for record in reader
