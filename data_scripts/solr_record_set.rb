@@ -1,20 +1,19 @@
-require_relative("marc_records")
-
 class SolrRecordSet
 
-  attr_reader :list, :raw_match_data
+  attr_reader :list, :records
 
-  def initialize(data_file, match_data_file)
-    @list = {}
-    @raw_match_data = []
-    load_marc_records(data_file)
-    load_match_data(match_data_file)
-    match!
+  def initialize(data_file)
+    @records = {}
+    reader = MARC::XMLReader.new(data_file)
+    for record in reader
+      r = Record.new(record)
+      records[r.issn] = r
+    end
   end
 
   def to_xml
     xml_record = %[<xml version="1.0" encoding="UTF-8"?><add>]
-      @list.each do |key, value|
+      @records.each do |key, value|
         xml_record += value.to_xml
       end
     xml_record += %[</add>]
@@ -25,35 +24,41 @@ class SolrRecordSet
       f.puts self.to_xml
     }
   end
+
+  def match(match_file)
+    match_file.each_line do |line|
+      data = line.split("|")
+      issn = data[2].chomp
+      statement = data[3].chomp
+      @records[issn].set_match(updated?(statement), statement) if @records[issn]
+    end
+  end
+
+  def add_bad_issns(bad_issn_object)
+    @records.each do |issn,record|
+      record.bad_issn = bad_issn_object==record.titleID
+    end
+  end
+
+  def add_holding_errors(holding_errors_object)
+    @records.each do |issn,record|
+      record.holding_error = holding_errors_object.include?(record.titleID)
+      record.holding_error_statement = holding_errors_object.for(record.titleID)
+    end
+  end
+
+  def add_summary_holdings(summary_holdings_object)
+    @records.each do |issn,record|
+      record.summary_holdings = summary_holdings_object.statement(record.sfx_object_id)
+    end
+  end
+
   private
 
   def load_marc_records(data_file)
-    @list = process(MarcRecords.new(data_file))
+    @matched_records = process(MarcRecords.new(data_file))
   end
-
-  def process(marc_records)
-    list = {}
-    marc_records.list.each do |record|
-      list.merge!(record.issn => record)
-    end
-    list
-  end
-
-  def load_match_data(data_file)
-    data_file.each_line do |line|
-      @raw_match_data << line
-    end
-  end
-
-  def match!
-    @raw_match_data.each do |match|
-      data = match.split("|")
-      issn = data[2].chomp
-      statement = data[3].chomp
-      @list[issn].set_match(updated?(statement), statement) if @list[issn] 
-    end
-  end
-
+  
   def updated?(statement)
     statement.include?("Not updated") ? false : true
   end

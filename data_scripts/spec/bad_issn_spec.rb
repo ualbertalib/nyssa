@@ -6,7 +6,7 @@ end
 
 describe BadIssn do
 
-  let(:bad_issn){ BadIssn.new(StringIO.new(bad_issn_records)) }
+  let(:bad_issn){ BadIssn.new(StringIO.new(bad_issn_data)) }
 
 # BadIssn takes reads the badissn data, takes in a titleID and returns whether the issn is bad or not.
 

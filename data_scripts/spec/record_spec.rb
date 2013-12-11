@@ -6,10 +6,7 @@ end
 
 describe Record do
  context "given a marc record" do
-  let(:record){ Record.new(MARC::XMLReader.new(StringIO.new(single_record)).first, 
-                                   BadIssn.new(StringIO.new(bad_issn_records)), 
-				   HoldingErrors.new(StringIO.new(holding_error_records)),
-				   SummaryHoldings.new(StringIO.new(summary_holdings_records))) }
+  let(:record){ Record.new(MARC::XMLReader.new(StringIO.new(single_record)).first) }
 
   it "returns an xml representation" do
       expect(record.to_xml.chomp).to eq unmatched_solr_record.chomp
