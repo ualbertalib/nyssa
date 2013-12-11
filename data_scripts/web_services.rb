@@ -12,6 +12,24 @@ class WebServices
     end
   end
 
+  def date_statement(object_id)
+    statement = ""
+    doc = call(object_id)
+    if hits(doc).to_i == 0 then
+      statement = "Record not found in Sirsi"
+    else 
+      endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
+      search_url = "#{endpoint}#{titleID(object_id)}"
+      doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
+      doc.xpath("//MarcEntryInfo").each do |element|
+       element_value = element.xpath("text").text
+       if(element_value.include? "University of Alberta Access") then
+         statement = element_value[element_value.index(':')+2..-1]
+       end
+     end
+   end
+   statement
+ end
   private
 
   def hits(document)
@@ -28,21 +46,4 @@ class WebServices
 #    @xml_response
 #  end
 #
-#  def date_statement
-#    statement = ""
-#    if @hits.to_i == 0 then
-#      statement = "Record not found in Sirsi"
-#    else 
-#      endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
-#      search_url = "#{endpoint}#{titleID}"
-#      doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
- #     doc.xpath("//MarcEntryInfo").each do |element|
- #       element_value = element.xpath("text").text
- #       if(element_value.include? "University of Alberta Access") then
- #         statement = element_value[element_value.index(':')+2..-1]
- #       end
- #     end
- #   end
- #   statement
- # end
 end

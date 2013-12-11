@@ -34,7 +34,7 @@ class Record
   end
 
   def to_xml
-   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{has_bad_dates}</field><field name=\"ua_bad_issn\">#{bad_issn}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{bad_date_statement}</field><field name=\"ua_dateStatement\">#{@match_statement}</field><field name=\"ua_summary_holdings">#{summary_holdings_statement}</field>]
+   xml_record =  %[<doc><field name=\"id\">#{@sfx_object_id}</field><field name=\"ua_object_id\">#{@sfx_object_id}</field><field name=\"ua_title\">#{@title}</field><field name=\"ua_issnPrint\">#{@issn}</field><field name=\"ua_issnElectronic\">#{@eissn}</field><field name=\"ua_freeJournal\">free</field><field name=\"ua_language\">#{@language}</field><field name=\"ua_catkey\">#{@titleID}</field><field name=\"ua_singleTarget\">#{single_target}</field><field name=\"ua_noISSN\">#{@no_issn}</field><field name=\"ua_updated\">#{@update_status}</field><field name=\"ua_bad_dates\">#{has_bad_dates}</field><field name=\"ua_bad_issn\">#{bad_issn}</field><field name=\"ua_no_url\">#{@no_url}</field><field name=\"ua_holdings_comparison">#{bad_date_statement}</field><field name=\"ua_date_statement\">#{@match_statement}</field><field name=\"ua_summary_holdings\">#{summary_holdings_statement}</field><field name=\"ua_sirsi_coverage\">#{fetch_sirsi_coverage}</field>]
   
   xml_record+=targets
   xml_record+="</doc>"
@@ -45,6 +45,10 @@ class Record
 
   def fetch_titleID
     WebServices.new.titleID(@marc_record.sfx_object_id)
+  end
+
+  def fetch_sirsi_coverage
+    WebServices.new.date_statement(@marc_record.sfx_object_id)
   end
 
   def single_target
