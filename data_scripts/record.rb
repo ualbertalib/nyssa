@@ -37,6 +37,7 @@ class Record
   
   xml_record+=facet_targets
   xml_record+=display_targets
+  xml_record+=%[<field name="ua_last_updated">#{DateTime.now}</field>]
   xml_record+="</doc>"
   #xml_record.gsub("<<", "").gsub(">>", "")
   #CGI::escapeHTML xml_record
