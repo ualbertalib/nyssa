@@ -100,13 +100,16 @@ class CatalogController < ApplicationController
     config.add_show_field 'ua_inSirsi', :label=>'In Sirsi Only? '
     config.add_show_field 'ua_singleTarget', :label=>'Single Target? '
     config.add_show_field 'ua_updated', :label=>'Updated? '
-    config.add_show_field 'ua_sirsiPubDateNotes', :label=>'Notes: '
+    config.add_show_field 'ua_bad_issn', :label=>'Bad Issn: '
+    config.add_show_field 'ua_bad_dates', :label=>'Bad Dates: '
+    config.add_show_field 'ua_no_url', :label=>'No URL: '
+    config.add_show_field 'ua_match_notes', :label=>'Notes: '
     config.add_show_field 'ua_link_text', :label=>'Link Text (856z): '
     config.add_show_field 'ua_language', :label=>'Language: '
     config.add_show_field 'ua_freeJournal', :label=>'Free? '
     config.add_show_field 'ua_dateStatement', :label=>'Summary of Holdings: '
     config.add_show_field 'ua_alternateCatKey', :label=>'Alternate Catkey: '
-    config.add_show_field 'ua_lastUpdated', :label=>'Last Updated: ' # for incremental updates
+    config.add_show_field 'ua_last_updated', :label=>'Last Updated: ' # for incremental updates
     config.add_show_field 'ua_noIssn', :label=>'Title Only (No ISSN): '
     config.add_show_field 'updated', :label=>'Last System Update: '
 
