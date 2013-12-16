@@ -90,12 +90,15 @@
            ua_object_id^100000
 	            ua_catkey^100000
 		             ua_title^100000
+			     ua_target^100000
 			              ua_issnPrint^100000
        </str>
        <str name="pf">
             ua_object_id^1000000
 	             ua_catkey^1000000
 		              ua_title^1000000
+			      ua_target^1000000
+
 			               ua_issnPrint^1000000
 				          text^10
        </str>
@@ -111,6 +114,12 @@
 							       </str>
 							              <str name="title_pf">
 								               ua_title
+									              </str>
+					       <str name="target_qf">
+						 ua_search_targets
+							       </str>
+							              <str name="target_pf">
+									ua_search_targets
 									              </str>
 
 										             <str name="issn_qf">

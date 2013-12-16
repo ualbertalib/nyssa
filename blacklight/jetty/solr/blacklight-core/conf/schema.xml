@@ -597,6 +597,8 @@
     <dynamicField name="ua_*" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="identifiers" type="text" indexed="true" stored="false" multiValued="true"/>
     <field name="ua_target" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="ua_search_targets" type="text" indexed="true" stored="true" multiValued="true"/>
+    <field name="ua_display_target_*" type="text" indexed="true" stored="true" multiValued="false"/>
     <field name="ua_title" type="text" indexed="true" stored="true" multiValued="false"/>
    
  </fields>
@@ -628,6 +630,7 @@
    <copyField source="subject_t" dest="subject_unstem_search"/>
    <copyField source="subject_addl_t" dest="subject_addl_unstem_search"/>
    <copyField source="subject_topic_facet" dest="subject_topic_unstem_search"/>
+   <copyField source="ua_target" dest="ua_search_targets"/>
    
    <!-- sort fields -->
    <copyField source="pub_date" dest="pub_date_sort"/>
@@ -651,7 +654,7 @@
    <copyField source="subject_topic_facet" dest="subject_spell"/>
    <copyField source="subject_t" dest="subject_spell"/>
    <copyField source="subject_addl_t" dest="subject_spell"/>  
-   
+
    <!-- OpenSearch query field should match request handler search fields -->
    <copyField source="title_t" dest="opensearch_display"/>
    <copyField source="subtitle_t" dest="opensearch_display"/>

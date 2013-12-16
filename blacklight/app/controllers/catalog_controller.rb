@@ -86,7 +86,17 @@ class CatalogController < ApplicationController
     config.add_show_field 'ua_issnPrint', :label=>'Print ISSN: '
     config.add_show_field 'ua_issnElectronic', :label=>'Electronic ISSN: '
     config.add_show_field 'ua_issnINCORRECT', :label=>'Incorrect ISSN: '
-    config.add_show_field 'ua_target', :label=>'Targets: '
+    config.add_show_field 'ua_display_target_0', :label=>'Target: '
+    config.add_show_field 'ua_display_target_1', :label=>'Target: '
+    config.add_show_field 'ua_display_target_2', :label=>'Target: '
+    config.add_show_field 'ua_display_target_3', :label=>'Target: '
+    config.add_show_field 'ua_display_target_4', :label=>'Target: '
+    config.add_show_field 'ua_display_target_5', :label=>'Target: '
+    config.add_show_field 'ua_display_target_6', :label=>'Target: '
+    config.add_show_field 'ua_display_target_7', :label=>'Target: '
+    config.add_show_field 'ua_display_target_8', :label=>'Target: '
+    config.add_show_field 'ua_display_target_9', :label=>'Target: '
+    config.add_show_field 'ua_display_target_10', :label=>'Target: '
     config.add_show_field 'ua_inSirsi', :label=>'In Sirsi Only? '
     config.add_show_field 'ua_singleTarget', :label=>'Single Target? '
     config.add_show_field 'ua_updated', :label=>'Updated? '
@@ -166,6 +176,12 @@ class CatalogController < ApplicationController
       }
     end
 
+    config.add_search_field('target') do |field|
+      field.solr_local_parameters = {
+       :qf => '$target_qf',
+       :pf => '$target_pf'
+      }
+    end
 
     
     # Specifying a :qt only to show it's possible, and so our internal automated
