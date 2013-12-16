@@ -12,7 +12,7 @@ class SolrRecordSet
   end
 
   def to_xml
-    xml_record = %[<xml version="1.0" encoding="UTF-8"?><add>]
+    xml_record = %[<?xml version="1.0" encoding="UTF-8"?><add>]
       @records.each do |key, value|
         xml_record += value.to_xml
       end

@@ -1,9 +1,10 @@
+require "cgi"
 require_relative "web_services"
 require_relative "marc_record"
 
 class Record
 
-  attr_reader :marc_record, :issn, :titleID, :sfx_object_id
+  attr_reader :marc_record, :issn, :sfx_object_id
   attr_accessor :bad_issn, :holding_error, :holding_error_statement, :summary_holdings
 
   def initialize(record)
@@ -37,6 +38,11 @@ class Record
   xml_record+=targets
   xml_record+="</doc>"
   #xml_record.gsub("<<", "").gsub(">>", "")
+  #CGI::escapeHTML xml_record
+  end
+
+  def titleID
+    @web_services.titleID
   end
 
   private 
