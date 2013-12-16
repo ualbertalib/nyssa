@@ -600,6 +600,7 @@
     <field name="ua_search_targets" type="text" indexed="true" stored="true" multiValued="true"/>
     <field name="ua_display_target_*" type="string" indexed="true" stored="true" multiValued="false"/>
     <field name="ua_title" type="text" indexed="true" stored="true" multiValued="false"/>
+    <field name="updated" type="date" default="NOW"/>
    
  </fields>
 

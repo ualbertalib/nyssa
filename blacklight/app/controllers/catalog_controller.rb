@@ -108,6 +108,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'ua_alternateCatKey', :label=>'Alternate Catkey: '
     config.add_show_field 'ua_lastUpdated', :label=>'Last Updated: ' # for incremental updates
     config.add_show_field 'ua_noIssn', :label=>'Title Only (No ISSN): '
+    config.add_show_field 'updated', :label=>'Last System Update: '
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
