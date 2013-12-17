@@ -59,12 +59,12 @@ class CatalogController < ApplicationController
     #}
 
     config.add_facet_field 'ua_updated', :label=>'Successful Match'
+    config.add_facet_field 'ua_date_statement', :label=>'Match Statement'
     config.add_facet_field 'ua_singleTarget', :label=>'Single Target'
     config.add_facet_field 'ua_language', :label=>'Language'
     config.add_facet_field 'ua_freeJournal', :label=>'Free'
     config.add_facet_field 'ua_target', :label=>'Targets', :limit => 10, :sort=>'index'
-    config.add_facet_field 'ua_sirsiPubDateNotes', :label=>'Sirsi Date Notes'
-    config.add_facet_field 'ua_inSirsi', :label=>'In Sirsi Only'
+    config.add_facet_field 'ua_inSirsi', :label=>'In Sirsi Only (not in SFX)'
     config.add_facet_field 'ua_noIssn', :label=>'Title Only (No ISSN)'
 
 
@@ -85,7 +85,6 @@ class CatalogController < ApplicationController
     config.add_show_field 'ua_catkey', :label=>'Catkey: '
     config.add_show_field 'ua_issnPrint', :label=>'Print ISSN: '
     config.add_show_field 'ua_issnElectronic', :label=>'Electronic ISSN: '
-    config.add_show_field 'ua_issnINCORRECT', :label=>'Incorrect ISSN: '
     config.add_show_field 'ua_display_target_0', :label=>'Target: '
     config.add_show_field 'ua_display_target_1', :label=>'Target: '
     config.add_show_field 'ua_display_target_2', :label=>'Target: '
@@ -100,17 +99,19 @@ class CatalogController < ApplicationController
     config.add_show_field 'ua_inSirsi', :label=>'In Sirsi Only? '
     config.add_show_field 'ua_singleTarget', :label=>'Single Target? '
     config.add_show_field 'ua_updated', :label=>'Updated? '
+    config.add_show_field 'ua_date_statement', :label=>'PubDateNotes (from matchissn)'
     config.add_show_field 'ua_bad_issn', :label=>'Bad Issn: '
     config.add_show_field 'ua_bad_dates', :label=>'Bad Dates: '
     config.add_show_field 'ua_no_url', :label=>'No URL: '
-    config.add_show_field 'ua_match_notes', :label=>'Notes: '
     config.add_show_field 'ua_link_text', :label=>'Link Text (856z): '
     config.add_show_field 'ua_language', :label=>'Language: '
     config.add_show_field 'ua_freeJournal', :label=>'Free? '
-    config.add_show_field 'ua_dateStatement', :label=>'Summary of Holdings: '
-    config.add_show_field 'ua_alternateCatKey', :label=>'Alternate Catkey: '
-    config.add_show_field 'ua_last_updated', :label=>'Last Updated: ' # for incremental updates
-    config.add_show_field 'ua_noIssn', :label=>'Title Only (No ISSN): '
+    config.add_show_field 'ua_summary_holdings', :label=>'Summary of Holdings: '
+    config.add_show_field 'ua_holdings_comparison', :label=>'Holdings Error (from holderr)'
+    #config.add_show_field 'ua_alternateCatKey', :label=>'Alternate Catkey: '
+    config.add_show_field 'ua_last_updated', :label=>'This Record Last Updated: ' # for incremental updates
+    #config.add_show_field 'ua_noIssn', :label=>'Title Only (No ISSN): '
+    #config.add_show_field 'ua_issnINCORRECT', :label=>'Incorrect ISSN: '
     config.add_show_field 'updated', :label=>'Last System Update: '
 
     # "fielded" search configuration. Used by pulldown among other places.
