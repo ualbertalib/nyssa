@@ -6,6 +6,7 @@ task :fetch_data do
   `curl http://resolver.library.ualberta.ca/sfx2sirsi/notSFX.txt > data_scripts/data/notSFX.txt`
   `curl http://resolver.library.ualberta.ca/sfx2sirsi/notSIR > data_scripts/data/notSIR`
   `curl http://resolver.library.ualberta.ca/sfx2sirsi/data/sfxdata.xml > data_scripts/data/sfxdata.xml`   
+  `curl http://resolver.library.ualberta.ca/sfx2sirsi/summary_holdings > data_scripts/data/summary_holdings` 
 end
 
 desc "Create Sirsi Only records" 
@@ -16,4 +17,9 @@ end
 desc "Create SFX records" 
 task :sfx_records do
   `ruby data_scripts/main.rb sfx data_scripts/data/sfxdata.xml data_scripts/data/matchissn.txt data_scripts/data/badissn.txt data_scripts/data/holderr.txt data_scripts/data/summary_holdings data_scripts/data/solr.xml`
+end
+
+desc "Start Rails server"
+task :server do
+  `rails s -p 80`
 end

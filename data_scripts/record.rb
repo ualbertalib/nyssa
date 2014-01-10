@@ -18,14 +18,16 @@ class Record
     @title = @marc_record.title
     @eissn = @marc_record.electronicISSN
     @language = @marc_record.language
+    @update_status = "Not in matchissn"
+    @match_statement = "Not in matchissn"
     @no_issn = "false"
     @no_url = ""
     fetch_web_services
   end
 
   def set_match(status, statement)
-    @update_status = status 
-    @match_statement = statement 
+      @update_status = status 
+      @match_statement = statement
   end
 
   def updated?

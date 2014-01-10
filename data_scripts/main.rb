@@ -1,8 +1,7 @@
 require("marc")
 require_relative("includes")
 
-puts "Usage: main.rb marcxml matchissn badissn holderr summary outfile" unless ARGV[0]
-
+puts "Usage: main.rb sfx/sirsi marcxml matchissn badissn holderr summary outfile"; exit unless ARGV[0]
 
 def process_sfx_records(marcxml_file, matchissn, badissn, holdings_errors, summary_holdings, solr_xml)
 puts "#new"
@@ -31,6 +30,7 @@ badissn = ARGV[3]
 holdings_errors = ARGV[4]
 summary_holdings = ARGV[5]
 solr_xml = ARGV[6]
+puts "processing sfx records"
 process_sfx_records(marcxml_file, matchissn, badissn, holdings_errors, summary_holdings, solr_xml)
 else
 sirsi_file = ARGV[1]
