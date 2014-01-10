@@ -1,5 +1,7 @@
 class SirsiRecords
 
+  attr_reader :records
+
   def initialize(data_file)
     @records = {}
     data_file.each_line do |line|
@@ -14,7 +16,7 @@ class SirsiRecords
   def to_xml
     xml_records = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add>"
     @records.each do |issn,record|
-      xml_records += "<doc><field name=\"id\">#{record[:titleID]}</field><field name=\"ua_issnPrint\">#{record[:issn]}</field><field name=\"ua_catkey\">#{record[:titleID]}</field><field name=\"ua_link_text\">#{record[:link_text]}</field><field name=\"ua_inSirsi\">true</field>"
+      xml_records += "<doc><field name=\"id\">#{record[:titleID]}</field><field name=\"ua_issnPrint\">#{record[:issn]}</field><field name=\"ua_catkey\">#{record[:titleID]}</field><field name=\"ua_link_text\">#{record[:link_text]}</field><field name=\"ua_inSirsi\">true</field></doc>"
     end
     xml_records+="</add>"
   end
