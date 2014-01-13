@@ -30,8 +30,10 @@ class WebServices
       doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
       doc.xpath("//MarcEntryInfo").each do |element|
        element_value = element.xpath("text").text
-       if(element_value.include? "University of Alberta Access") then
-         statement = element_value[element_value.index(':')+2..-1]
+       if((element_value.include?("University of Alberta Access")) && (element_value.include?(":"))) then
+         statement = element_value[element_value.index(':')+2..-1] 
+       else
+         statement = ""
        end
      end
    end
