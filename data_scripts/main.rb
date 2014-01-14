@@ -12,8 +12,8 @@ puts "#badissn"
 solr_record_set.add_bad_issns(badissn)
 puts "#holdings_errors"
 solr_record_set.add_holding_errors(HoldingErrors.new(File.open(holdings_errors).read))
-puts "#summary_holdings"
-solr_record_set.add_summary_holdings(SummaryHoldings.new(File.open(summary_holdings)))
+#puts "#summary_holdings"
+#solr_record_set.add_summary_holdings(SummaryHoldings.new(File.open(summary_holdings)))
 puts "#to_solr"
 solr_record_set.to_solr(solr_xml)
 end

@@ -4,11 +4,18 @@ class SolrRecordSet
 
   def initialize(data_file)
     @records = {}
-    reader = MARC::XMLReader.new(data_file)
+    @titles = {}
+    @targets = {}
+    #reader = MARC::XMLReader.new(data_file)
+    reader = read_sfx2sirsi_file(data_file)
+    read_target_file("data_scripts/data/targets.txt")
     for record in reader
       r = Record.new(record)
-      records[r.issn] = r
+      @records[r.issn] = r
+      @records[r.issn].title = @titles[r.sfx_object_id]
+      @records[r.issn].targets = @targets[r.sfx_object_id]
     end
+    puts @records.size
   end
 
   def to_xml
@@ -61,5 +68,27 @@ class SolrRecordSet
   
   def updated?(statement)
     statement.include?("Not updated") ? false : true
+  end
+
+  def read_sfx2sirsi_file(data_file)
+    reader = []
+    File.open(data_file).each_line do |line|
+      if line.include?("|") then
+        sfx_object_id, issn, eissn, open_url, summary_holdings, related_objects, free_or_restricted = line.split("|")
+        reader << {:sfx_object_id => sfx_object_id, :issn => issn, :eissn => eissn, :open_url => open_url, :summary_holdings => summary_holdings, :related_objects => related_objects, :free_or_restricted => free_or_restricted}
+      end
+    end
+    reader
+  end
+
+  def read_target_file(target_file)
+    File.open(target_file).each_line do |line|
+      sfx_object_id = line.split("|").first.strip
+      title = line.split("|")[1].split(":").first
+      target = []
+      target = line.split(": ")[1].split(", ")
+      @titles[sfx_object_id] = title
+      @targets[sfx_object_id] = target
+    end
   end
 end
