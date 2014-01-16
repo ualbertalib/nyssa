@@ -22,7 +22,7 @@ class WebServices
   def date_statement
     statement = ""
     doc = call(@sfx_object_id)
-    if hits(doc).to_i == 0 then
+    if @titleID == "No record found." then
       statement = "Record not found in Sirsi"
     else 
       endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
