@@ -20,25 +20,24 @@ class WebServices
   end
 
   def date_statement
-    statement = ""
+    @statement = ""
     doc = call(@sfx_object_id)
     if @titleID == "No record found." then
-      statement = "Record not found in Sirsi"
+      @statement = "Record not found in Sirsi"
     else 
       endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
       search_url = "#{endpoint}#{@titleID}"
       doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
       doc.xpath("//MarcEntryInfo").each do |element|
-       element_value = element.xpath("text").text
-       if((element_value.include?("University of Alberta Access")) && (element_value.include?(":"))) then
-         statement = element_value[element_value.index(':')+2..-1] 
-       else
-         statement = ""
-       end
-     end
-   end
-   statement
- end
+        element_value = element.xpath("text").text
+        if((element_value.include?("University of Alberta Access")) && (element_value.include?(":"))) then
+           @statement = element_value[element_value.index(':')+2..-1] 
+        end
+      end
+    end
+    @statement
+  end
+
   private
 
   def hits(document)
