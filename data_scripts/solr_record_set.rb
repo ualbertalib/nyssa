@@ -1,14 +1,14 @@
 class SolrRecordSet
 
-  attr_accessor :set
+  attr_accessor :set, :titleIDs
 
-  def initialize(datafile, targetsfile)
+  def initialize(datafile, targetsfile, matchissn)
     @set = {}
     @targets = {}
+    @titleIDs = {}
     datafile.each_line do |line|
       if line.include?("|") then
         sfx_object_id = line.split("|").first.strip
-	#puts sfx_object_id
         issn = line.split("|")[1].gsub("<", "").gsub(">", "")
         eissn = line.split("|")[2].gsub("<", "").gsub(">", "")
         link = line.split("|")[3].gsub("<", "").gsub(">", "")
@@ -21,12 +21,16 @@ class SolrRecordSet
     targetsfile.each_line do |line|
       if line.include?("|") then
         sfx_object_id = line.split("|").first.strip
-        #puts "targets:#{sfx_object_id}"
         title = line.split(": ").first.split("|").last.strip.gsub("<", "").gsub(">", "")
         tgts = Array(line.split(": ").last.strip.gsub("<", "").gsub(">", ""))
         temp = @set[sfx_object_id].merge({:title => title, :targets => tgts}) unless @set[sfx_object_id].nil?
         @set[sfx_object_id] = temp
       end
+   end
+   matchissn.each_line do |line|
+    titleID = line.split("|").first.strip
+    issn = line.split("|")[2].strip
+    @titleIDs[issn] = titleID
    end
   end
  
@@ -45,6 +49,7 @@ class SolrRecordSet
   private
   
   def xml_representation(sfx_object_id, record)
-      %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{record[:titleID]}</field><field name = "ua_singleTarget">#{record[:single_target]}</field><field name = "ua_not_updated">#{record[:not_updated]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field></doc>]
+      puts @titleIDs[record[:issn]]
+      %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{@titleIDs[record[:issn]]}</field><field name = "ua_singleTarget">#{record[:single_target]}</field><field name = "ua_not_updated">#{record[:not_updated]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field></doc>]
   end
 end

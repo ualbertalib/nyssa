@@ -3,9 +3,9 @@ require_relative("includes")
 
 puts "Usage: main.rb sfx/sirsi infile targets outfile"; exit unless ARGV[0]
 
-def process_sfx_records(infile, targets, solr_xml)
+def process_sfx_records(infile, targets, matchissn, solr_xml)
   puts "#new"
-  solr_record_set = SolrRecordSet.new(File.open(infile), File.open(targets))
+  solr_record_set = SolrRecordSet.new(File.open(infile), File.open(targets), File.open(matchissn))
   puts "#to_solr"
   solr_record_set.to_solr(solr_xml)
 end
@@ -18,11 +18,13 @@ end
 if ARGV[0] == "sfx"
   datafile = ARGV[1]
   targets_file = ARGV[2]
-  solr_xml = ARGV[3]
+  matchissn = ARGV[3]
+  solr_xml = ARGV[4]
   puts datafile
   puts targets_file
+  puts matchissn
   puts "processing sfx records"
-  process_sfx_records(datafile, targets_file, solr_xml)
+  process_sfx_records(datafile, targets_file, matchissn, solr_xml)
 else
   sirsi_file = ARGV[1]
   sirsi_outfile = ARGV[2]
