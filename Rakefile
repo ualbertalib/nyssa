@@ -17,7 +17,7 @@ end
 
 desc "Create SFX records" 
 task :sfx_records do
-  `ruby data_scripts/main.rb sfx data_scripts/data/sfxdata.xml data_scripts/data/matchissn.txt data_scripts/data/badissn.txt data_scripts/data/holderr.txt data_scripts/data/summary_holdings data_scripts/data/solr.xml`
+  `ruby data_scripts/main.rb sfx data_scripts/data/full.txt data_scripts/data/targets.txt data_scripts/data/solr.xml`
 end
 
 desc "Start Rails server"
