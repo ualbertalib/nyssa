@@ -38,6 +38,25 @@ class WebServices
     @statement
   end
 
+#  def electronic_issn
+#    @eissn = ""
+#    doc = call(@sfx_object_id)
+#    if @titleID == "No record found." then
+#      @eissn = "Record not found in Sirsi"
+#    else 
+#      endpoint="http://ws.library.ualberta.ca/symws3/rest/standard/lookupTitleInfo?clientID=Primo&marcEntryFilter=ALL&titleID="
+#      search_url = "#{endpoint}#{@titleID}"
+#      doc = Nokogiri::XML(open(search_url).read).remove_namespaces!
+#      doc.xpath("//MarcEntryInfo").each do |element|
+#        field_number = element.xpath("entryID").text
+#        if field_number=="776" then
+#           @eissn = element.xpath("text").text
+#	end
+#      end
+#    end
+#    @eissn
+#  end
+
   private
 
   def hits(document)
