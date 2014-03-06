@@ -7,7 +7,7 @@ class SolrRecordSet
   def initialize(datafile, targetsfile, matchissn)
     @set = {}
     @targets = {}
-    @titleIDs = {}
+    @update_statuses = {}
     datafile.each_line do |line|
       if line.include?("|") then
         sfx_object_id = line.split("|").first.strip
@@ -30,6 +30,17 @@ class SolrRecordSet
         @set[sfx_object_id] = temp
       end
     end
+    matchissn.each_line do |line|
+     titleID = line.split("|").first.strip
+     update_status = line.split("|").last.strip
+     @update_statuses[titleID] = update_status
+    end
+
+    @set.each do |key,record|
+      if record
+        record.merge!({:sfx_dates=> @update_statuses[record[:titleID].to_s], :ua_updated => (@update_statuses[record[:titleID].to_s] == "Pub Dates ok")})
+      end
+    end
   end
  
   def to_solr(outfile)
@@ -47,7 +58,8 @@ class SolrRecordSet
   private
   
   def xml_representation(sfx_object_id, record)
-      xml_record = %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{record[:titleID]}</field><field name = "ua_singleTarget">#{single_target?(record)}</field><field name = "ua_not_updated">#{record[:not_updated]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field>]
+      
+      xml_record = %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{record[:titleID]}</field><field name = "ua_singleTarget">#{single_target?(record)}</field><field name = "ua_updated">#{record[:ua_updated]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field>]
       xml_record+=display_targets(record)
       xml_record+=facet_targets(record)
       xml_record+="</doc>"
