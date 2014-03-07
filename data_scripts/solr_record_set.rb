@@ -1,10 +1,11 @@
 require_relative "web_services.rb"
+require_relative "holding_errors.rb"
 
 class SolrRecordSet
 
   attr_accessor :set
 
-  def initialize(datafile, targetsfile, matchissn)
+  def initialize(datafile, targetsfile, matchissn, holderr_file)
     @set = {}
     @targets = {}
     @update_statuses = {}
@@ -18,7 +19,7 @@ class SolrRecordSet
         related = line.split("|")[5].gsub("<", "").gsub(">", "")
         free = line.split("|")[6].gsub("<", "").gsub(">", "")
 	ws = WebServices.new(sfx_object_id)
-        @set[sfx_object_id] = {:issn=>issn, :eissn=>eissn, :link => link, :date_statement => date_statement, :related => related, :free => free, :titleID => ws.titleID}
+        @set[sfx_object_id] = {:issn=>issn, :eissn=>eissn, :link => link, :sfx_dates => date_statement, :related => related, :free => free, :titleID => ws.titleID, :sirsi_dates => ws.date_statement} 
       end
     end
     targetsfile.each_line do |line|
@@ -35,10 +36,15 @@ class SolrRecordSet
      update_status = line.split("|").last.strip
      @update_statuses[titleID] = update_status
     end
+    
+   
 
+    @holderr = HoldingErrors.new(holderr_file)
     @set.each do |key,record|
+
+      @holdings_error = @holderr.for(record[:titleID]) if @holderr.include?(record[:titleID])
       if record
-        record.merge!({:sfx_dates=> @update_statuses[record[:titleID].to_s], :ua_updated => (@update_statuses[record[:titleID].to_s] == "Pub Dates ok")})
+        record.merge!({:update_status=> @update_statuses[record[:titleID].to_s], :ua_updated => (@update_statuses[record[:titleID].to_s] == "Pub Dates ok"), :ua_holdings_comparison => @holdings_error})
       end
     end
   end
@@ -59,7 +65,7 @@ class SolrRecordSet
   
   def xml_representation(sfx_object_id, record)
       
-      xml_record = %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{record[:titleID]}</field><field name = "ua_singleTarget">#{single_target?(record)}</field><field name = "ua_updated">#{record[:ua_updated]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field>]
+      xml_record = %[<doc><field name ="id">#{sfx_object_id}</field><field name = "ua_object_id">#{sfx_object_id}</field><field name = "ua_title">#{record[:title]}</field><field name = "ua_issnPrint">#{record[:issn]}</field><field name = "ua_issnElectronic">#{record[:eissn]}</field><field name = "ua_freeJournal">#{record[:free]}</field><field name = "ua_catkey">#{record[:titleID]}</field><field name = "ua_singleTarget">#{single_target?(record)}</field><field name = "ua_updated">#{record[:ua_updated]}</field><field name="ua_update_status">#{record[:update_status]}</field><field name = "ua_sirsi_date_statement">#{record[:sirsi_dates]}</field><field name = "ua_sfx_date_statement">#{record[:sfx_dates]}</field><field name = "ua_bad_dates">#{record[:bad_dates]}</field><field name="ua_link_text">#{record[:link]}</field><field name="ua_holdings_comparison">#{record[:ua_holdings_comparison]}</field>]
       xml_record+=display_targets(record)
       xml_record+=facet_targets(record)
       xml_record+="</doc>"
