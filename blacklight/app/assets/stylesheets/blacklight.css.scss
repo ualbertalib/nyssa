@@ -2,3 +2,8 @@
 @import 'bootstrap-responsive';
 
 @import 'blacklight/blacklight';
+
+.dl-horizontal dt {
+  width: 300px;
+  text-align: left;
+}
